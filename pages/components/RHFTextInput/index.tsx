@@ -1,5 +1,5 @@
-import { Typography } from "@mui/material";
-import { useFormContext } from "react-hook-form";
+import { Typography, TextField } from "@mui/material";
+import { useFormContext, Controller } from "react-hook-form";
 interface ITextInput {
   name: string;
   type: "text" | "password";
@@ -9,16 +9,22 @@ interface ITextInput {
 export const RHFTextInput: React.FC<ITextInput> = ({ name, type, label }) => {
   const {
     register,
+    control,
     formState: { errors },
   } = useFormContext();
   return (
-    <>
-      <input type={type} placeholder={label} {...register(name)} />
-      {errors[name] && (
-        <Typography variant="caption" sx={{ color: "red" }}>
-          {errors[name].message}
-        </Typography>
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <TextField
+          {...field}
+          label={label}
+          type={type}
+          error={!!errors[name]}
+          helperText={errors[name]?.message}
+        />
       )}
-    </>
+    />
   );
 };

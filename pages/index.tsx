@@ -24,6 +24,10 @@ const schema = yup.object().shape({
 const Home: NextPage = () => {
   const methods = useForm<ILoginForm>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const onSubmit = (data: ILoginForm) => {
