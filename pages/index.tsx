@@ -1,8 +1,9 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import type { NextPage } from "next";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { RHFTextInput } from "./components/RHFTextInput";
 
 interface ILoginForm {
   email: string;
@@ -21,11 +22,7 @@ const schema = yup.object().shape({
 });
 
 const Home: NextPage = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ILoginForm>({
+  const methods = useForm<ILoginForm>({
     resolver: yupResolver(schema),
   });
 
@@ -43,40 +40,28 @@ const Home: NextPage = () => {
       }}
     >
       <Box>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack
-            spacing={2}
-            sx={{
-              p: 4,
-              width: "300px",
-              borderRadius: 1,
-              background: "#edede9",
-            }}
-          >
-            <Typography variant="h4" textAlign="center">
-              Login RHF
-            </Typography>
-            <input type="text" placeholder="Email" {...register("email")} />
-            {errors.email && (
-              <Typography variant="caption" sx={{ color: "red" }}>
-                {errors.email.message}
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)}>
+            <Stack
+              spacing={2}
+              sx={{
+                p: 4,
+                width: "300px",
+                borderRadius: 1,
+                background: "#edede9",
+              }}
+            >
+              <Typography variant="h4" textAlign="center">
+                Login RHF
               </Typography>
-            )}
-            <input
-              type="password"
-              placeholder="Senha"
-              {...register("password")}
-            />
-            {errors.password && (
-              <Typography variant="caption" sx={{ color: "red" }}>
-                {errors.password.message}
-              </Typography>
-            )}
-            <Button variant="contained" type="submit">
-              Enviar
-            </Button>
-          </Stack>
-        </form>
+              <RHFTextInput name="email" label="Email" type="text" />
+              <RHFTextInput name="password" label="Senha" type="password" />
+              <Button variant="contained" type="submit">
+                Enviar
+              </Button>
+            </Stack>
+          </form>
+        </FormProvider>
       </Box>
     </Stack>
   );
