@@ -32,6 +32,7 @@ const Home: NextPage = () => {
 
   const onSubmit = (data: ILoginForm) => {
     console.log(data);
+    methods.reset();
   };
 
   return (
